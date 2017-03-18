@@ -31,7 +31,7 @@ function startGame() {
 	gameArea.start();
 	music = new sound("music.mp3");
 	lose = new sound("lose.wav");
-	if (playmusic == true) {music.play();}
+	if (playmusic == 1) {music.play();}
 }
 var gameArea = {
 	canvas : document.createElement("canvas"),
@@ -58,7 +58,7 @@ var gameArea = {
 	},
 	stop : function() {
 		clearInterval(this.interval);
-		if (playmusic == true) {
+		if (playmusic == 1) {
 			music.stop();
 			lose.play();
 		}
@@ -148,13 +148,13 @@ function updateGameArea() {
 	player.update();
 }
 function toggleMusic() {
-	if (playmusic == true) {
-		playmusic = false;
-		document.cookie = "playmusic=false;";
+	if (playmusic == 1) {
+		playmusic = 0;
+		document.cookie = "playmusic=0;";
 		music.stop();
 	}else{
-		playmusic = true;
-		document.cookie = "playmusic=true;";
+		playmusic = 1;
+		document.cookie = "playmusic=1;";
 		music.play();
 	}
 }
