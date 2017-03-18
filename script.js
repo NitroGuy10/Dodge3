@@ -61,6 +61,7 @@ var gameArea = {
 		if (playmusic == 1) {
 			music.stop();
 			lose.play();
+			playmusic = 0;
 		}
 		gameArea.key = false;
 		setInterval(function(){ 
