@@ -11,11 +11,16 @@ var onepress = 0;
 var playerpos = 1;
 var playmusic;
 var score;
+var best;
+var scorenum = 0;
+var pb = 0;
 function startGame() {
+	pb = getCookie("pb");
 	playmusic = getCookie("playmusic");
 	mode = getCookie("mode");
 	player = new component(30, 30, "blue", 10, 120);
 	score = new component("30px", "Impact", "black", 320, 40, "text");
+	best = new component("30px", "Impact", "black", 320, 80, "text");
 	if (mode == 0) {
 		speed = 17;
 		obsinterval = 25;
@@ -71,6 +76,9 @@ var gameArea = {
 		})
 		if (gameArea.key == 13) {location.reload();}
 		 }, 1);
+	},
+	color : function(col) {
+		this.canvas.style.backgroundColor = col;
 	}
 }
 function everyinterval(n) {
@@ -130,6 +138,7 @@ function sound(src) {
 	}
 }
 function updateGameArea() {
+	scorenum = Math.round(gameArea.frameNo/20);
 	var x, height, gap, minHeight, maxHeight, minGap, maxGap;
 	for (i = 0; i < obstacles.length; i += 1) {
 		if (player.crashWith(obstacles[i])) {
@@ -151,8 +160,14 @@ function updateGameArea() {
 		obstacles[i].x -= speed;
 		obstacles[i].update();
 		}
-	score.text="Score: " + Math.round(gameArea.frameNo/20);
+	score.text="Score: " + scorenum;
 	score.update();
+	if (scorenum > pb) {
+		pb = scorenum;
+		best.text="Best: " + scorenum;
+		document.cookie = "pb=" + scorenum + ";";
+	}
+	best.update();
 	if (gameArea.key && gameArea.key == 38 && playerpos != 0 && onepress == 0) {playerpos -= 1; onepress = 1}
 	if (gameArea.key && gameArea.key == 40 && playerpos != 2 && onepress == 0) {playerpos += 1; onepress = 1}
 	player.newPos();
