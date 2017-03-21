@@ -10,10 +10,12 @@ var obstacles = [];
 var onepress = 0;
 var playerpos = 1;
 var playmusic;
+var score;
 function startGame() {
 	playmusic = getCookie("playmusic");
 	mode = getCookie("mode");
 	player = new component(30, 30, "blue", 10, 120);
+	score = new component("30px", "Impact", "black", 320, 40, "text");
 	if (mode == 0) {
 		speed = 17;
 		obsinterval = 25;
@@ -61,7 +63,6 @@ var gameArea = {
 		if (playmusic == 1) {
 			music.stop();
 			lose.play();
-			playmusic = 0;
 		}
 		gameArea.key = false;
 		setInterval(function(){ 
@@ -76,7 +77,8 @@ function everyinterval(n) {
 	if ((gameArea.frameNo / n) % 1 == 0) {return true;}
 	return false;
 }
-function component(width, height, color, x, y) {
+function component(width, height, color, x, y, type) {
+	this.type = type;
 	this.width = width;
 	this.height = height;
 	this.speedX = 0;
@@ -85,8 +87,14 @@ function component(width, height, color, x, y) {
 	this.y = y;
 	this.update = function(){
 		ctx = gameArea.context;
+		if (this.type == "text") {
+			ctx.font = this.width + " " + this.height;
+			ctx.fillStyle = color;
+			ctx.fillText(this.text, this.x, this.y);
+		} else {
 		ctx.fillStyle = color;
 		ctx.fillRect(this.x, this.y, this.width, this.height);
+		}
 	}
 	this.newPos = function() {
 		this.y = 20 + (100 * playerpos);
@@ -143,6 +151,8 @@ function updateGameArea() {
 		obstacles[i].x -= speed;
 		obstacles[i].update();
 		}
+	score.text="Score: " + Math.round(gameArea.frameNo/20);
+	score.update();
 	if (gameArea.key && gameArea.key == 38 && playerpos != 0 && onepress == 0) {playerpos -= 1; onepress = 1}
 	if (gameArea.key && gameArea.key == 40 && playerpos != 2 && onepress == 0) {playerpos += 1; onepress = 1}
 	player.newPos();
@@ -153,7 +163,7 @@ function toggleMusic() {
 		playmusic = 0;
 		document.cookie = "playmusic=0;";
 		music.stop();
-	}else{
+	}else {
 		playmusic = 1;
 		document.cookie = "playmusic=1;";
 		music.play();
@@ -163,7 +173,7 @@ function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
     var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
+    for(var i = 0; i < ca.length; i++) {
         var c = ca[i];
         while (c.charAt(0) == ' ') {
             c = c.substring(1);
