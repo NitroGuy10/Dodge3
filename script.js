@@ -164,9 +164,9 @@ function updateGameArea() {
 	score.update();
 	if (scorenum > pb) {
 		pb = scorenum;
-		best.text="Best: " + scorenum;
 		document.cookie = "pb=" + scorenum + ";";
 	}
+	best.text="Best: " + pb;
 	best.update();
 	if (gameArea.key && gameArea.key == 38 && playerpos != 0 && onepress == 0) {playerpos -= 1; onepress = 1}
 	if (gameArea.key && gameArea.key == 40 && playerpos != 2 && onepress == 0) {playerpos += 1; onepress = 1}
