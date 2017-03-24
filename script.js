@@ -169,9 +169,9 @@ function updateGameArea() {
 		}
 	score.text="Score: " + scorenum;
 	score.update();
+	best.text="Best: " + scorenum;
 	if (scorenum > pb) {
 		pb = scorenum;
-		best.text="Best: " + scorenum;
 		document.cookie = "pb=" + scorenum + ";";
 	}
 	best.update();
