@@ -25,6 +25,13 @@ function startGame() {
 		speed = 17;
 		obsinterval = 25;
 	}
+	if (mode == 3) {
+		speed = 17;
+		obsinterval = 25;
+		m3i = 0;
+		document.getElementById("d3").innerHTML += " - One Button Mode";
+		document.getElementById("directions").innerHTML = "Press the spacebar to move, avoid the red rectangles, and press enter to restart. Thats all!";
+	}
 	if (mode == 1) {
 		speed = 12;
 		obsinterval = 35;
@@ -164,12 +171,22 @@ function updateGameArea() {
 	score.update();
 	if (scorenum > pb) {
 		pb = scorenum;
+		best.text="Best: " + scorenum;
 		document.cookie = "pb=" + scorenum + ";";
 	}
-	best.text="Best: " + pb;
 	best.update();
-	if (gameArea.key && gameArea.key == 38 && playerpos != 0 && onepress == 0) {playerpos -= 1; onepress = 1}
-	if (gameArea.key && gameArea.key == 40 && playerpos != 2 && onepress == 0) {playerpos += 1; onepress = 1}
+	if (mode == 3) {
+		if (gameArea.key && gameArea.key == 32 && onepress == 0) {
+			onepress = 1;
+			if (m3i == 3) {m3i = 0;}else{m3i += 1;}
+			if (m3i == 0 || m3i == 2) {playerpos = 1;}
+			if (m3i == 1) {playerpos = 0;}
+			if (m3i == 3) {playerpos = 2;}
+		}
+	}else{
+	if (gameArea.key && gameArea.key == 38 && playerpos != 0 && onepress == 0) {playerpos -= 1; onepress = 1;}
+	if (gameArea.key && gameArea.key == 40 && playerpos != 2 && onepress == 0) {playerpos += 1; onepress = 1;}
+	}
 	player.newPos();
 	player.update();
 }
