@@ -169,12 +169,12 @@ function updateGameArea() {
 		}
 	score.text="Score: " + scorenum;
 	score.update();
-	best.text="Best: " + scorenum;
+	best.text="Best: " + pb;
+	best.update();
 	if (scorenum > pb) {
 		pb = scorenum;
 		document.cookie = "pb=" + scorenum + ";";
 	}
-	best.update();
 	if (mode == 3) {
 		if (gameArea.key && gameArea.key == 32 && onepress == 0) {
 			onepress = 1;
