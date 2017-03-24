@@ -15,9 +15,9 @@ var best;
 var scorenum = 0;
 var pb = 0;
 function startGame() {
-	pb = getCookie("pb");
 	playmusic = getCookie("playmusic");
 	mode = getCookie("mode");
+	pb = getCookie("pb" + mode);
 	player = new component(30, 30, "blue", 10, 120);
 	score = new component("30px", "Impact", "black", 320, 40, "text");
 	best = new component("30px", "Impact", "black", 320, 80, "text");
@@ -173,7 +173,7 @@ function updateGameArea() {
 	best.update();
 	if (scorenum > pb) {
 		pb = scorenum;
-		document.cookie = "pb=" + scorenum + ";";
+		document.cookie = "pb" + mode + "=" + scorenum + ";";
 	}
 	if (mode == 3) {
 		if (gameArea.key && gameArea.key == 32 && onepress == 0) {
