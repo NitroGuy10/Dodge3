@@ -23,7 +23,8 @@ function startMobile() {
 	$('html, body').css({
     overflow: 'hidden',
     height: '100%'
-});
+	});
+	gameArea.canvas.style.border = "none";
 	startGame();
 	}
 function startGame() {
@@ -57,6 +58,10 @@ function startGame() {
 	if (mode == 0) { 
 		speed = 17;
 		obsinterval = 25;
+	}
+	if (mobile == true) {
+	speed -= 5;
+	obsinterval += 10;
 	}
 	gameArea.start();
 	music = new sound("music.mp3");
@@ -206,8 +211,7 @@ function updateGameArea() {
 				if (mode != 3) {
 				if (direction == "up" && playerpos != 0) {playerpos -= 1;}
 				if (direction == "down" && playerpos != 2) {playerpos +=1;}
-				if (fingerCount == 2) {location.reload();}
-				if (fingerCount == 3) {document.getElementById("mode").className = "list";}
+				if (fingerCount > 1) {document.getElementById("mode").className = "list";}
 				}
 			},
 			tap:function(event, target) {
