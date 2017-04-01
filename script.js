@@ -20,9 +20,9 @@ var delay = 300;
 function startMobile() {
 	mobile = true;
 	delay = 1000;
-	$('html, body').css({
-    overflow: 'hidden',
-    height: '100%'
+	$("html, body").css({
+    overflow: "hidden",
+    height: "100%"
 	});
 	gameArea.canvas.style.border = "none";
 	startGame();
@@ -32,8 +32,13 @@ function startGame() {
 	mode = location.hash.slice(1);
 	pb = getCookie(("pb" + mode));
 	player = new component(30, 30, "blue", 10, 120);
-	score = new component("30px", "Impact", "black", 320, 40, "text");
-	best = new component("30px", "Impact", "black", 320, 80, "text");
+	if (mobile == false) {
+		score = new component("30px", "Impact", "black", 320, 40, "text");
+		best = new component("30px", "Impact", "black", 320, 80, "text");
+	}else{
+		score = new component("30px", "Impact", "black", 320, 80, "text");
+		best = new component("30px", "Impact", "black", 320, 120, "text");
+	}
 	if (mode == 3) {
 		speed = 17;
 		obsinterval = 25;
@@ -77,13 +82,13 @@ var gameArea = {
 		document.body.insertBefore(this.canvas, document.body.childNodes[0]);
 		this.frameNo = 0;
 		this.interval = setInterval(updateGameArea, 20);
-		window.addEventListener('keydown', function (e) {
+		window.addEventListener("keydown", function (e) {
 			if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
 				e.preventDefault();
 			}
 			gameArea.key = e.keyCode;
 		})
-		window.addEventListener('keyup', function (e) {
+		window.addEventListener("keyup", function (e) {
 			gameArea.key = false;
 			onepress = 0;
 		})
@@ -98,8 +103,15 @@ var gameArea = {
 			lose.play();
 		}
 		gameArea.key = false;
+		if (mobile == true) {
+		document.getElementById("mode").className = "list";
+		}
+		$("html, body").css({
+			overflow: "auto",
+			height: "auto"
+		});
 		setInterval(function(){ 
-			window.addEventListener('keydown', function (e) {
+			window.addEventListener("keydown", function (e) {
 			gameArea.key = e.keyCode;
 		})
 		if (gameArea.key == 13) {location.reload();}
@@ -211,7 +223,6 @@ function updateGameArea() {
 				if (mode != 3) {
 				if (direction == "up" && playerpos != 0) {playerpos -= 1;}
 				if (direction == "down" && playerpos != 2) {playerpos +=1;}
-				if (fingerCount > 1) {document.getElementById("mode").className = "list";}
 				}
 			},
 			tap:function(event, target) {
