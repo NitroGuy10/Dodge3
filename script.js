@@ -14,33 +14,49 @@ var score;
 var best;
 var scorenum = 0;
 var pb = 0;
+var mobile = false;
+var mode = 0;
+var delay = 300;
+function startMobile() {
+	mobile = true;
+	delay = 1000;
+	$('html, body').css({
+    overflow: 'hidden',
+    height: '100%'
+});
+	startGame();
+	}
 function startGame() {
 	playmusic = getCookie("playmusic");
-	mode = getCookie("mode");
-	pb = getCookie("pb" + mode);
+	mode = location.hash.slice(1);
+	pb = getCookie(("pb" + mode));
 	player = new component(30, 30, "blue", 10, 120);
 	score = new component("30px", "Impact", "black", 320, 40, "text");
 	best = new component("30px", "Impact", "black", 320, 80, "text");
-	if (mode == 0) {
-		speed = 17;
-		obsinterval = 25;
-	}
 	if (mode == 3) {
 		speed = 17;
 		obsinterval = 25;
 		m3i = 0;
+		if (mobile == false) {
 		document.getElementById("d3").innerHTML += " - One Button Mode";
 		document.getElementById("directions").innerHTML = "Press the spacebar to move, avoid the red rectangles, and press enter to restart. Thats all!";
+		}
 	}
 	if (mode == 1) {
 		speed = 12;
 		obsinterval = 35;
+		if (mobile == false)
 		document.getElementById("d3").innerHTML += " - Easy Mode";
 	}
 	if (mode == 2) {
 		speed = 11;
 		obsinterval = 18;
+		if (mobile == false)
 		document.getElementById("d3").innerHTML += " - Compact Mode";
+	}
+	if (mode == 0) { 
+		speed = 17;
+		obsinterval = 25;
 	}
 	gameArea.start();
 	music = new sound("music.mp3");
@@ -161,7 +177,7 @@ function updateGameArea() {
 	vari = Math.floor((Math.random() * 3));
 	if (vari == 0) {height = 30;}
 	if (vari == 1 || vari == 2) {height = 130; pos = Math.floor((Math.random() * 2))}
-	obstacles.push(new component(60, height, "red", x+300, 20 + (100 * pos)));
+	obstacles.push(new component(60, height, "red", x+delay, 20 + (100 * pos)));
 	}
 	for (i = 0; i < obstacles.length; i += 1) {
 		obstacles[i].x -= speed;
@@ -183,10 +199,29 @@ function updateGameArea() {
 			if (m3i == 1) {playerpos = 0;}
 			if (m3i == 3) {playerpos = 2;}
 		}
-	}else{
+	}
+	if (mobile == true) {
+		$("body").swipe( {
+			swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
+				if (mode != 3) {
+				if (direction == "up" && playerpos != 0) {playerpos -= 1;}
+				if (direction == "down" && playerpos != 2) {playerpos +=1;}
+				if (fingerCount == 2) {location.reload();}
+				if (fingerCount == 3) {document.getElementById("mode").className = "list";}
+				}
+			},
+			tap:function(event, target) {
+				if (mode == 3) {
+				if (m3i == 3) {m3i = 0;}else{m3i += 1;}
+				if (m3i == 0 || m3i == 2) {playerpos = 1;}
+				if (m3i == 1) {playerpos = 0;}
+				if (m3i == 3) {playerpos = 2;}
+			}
+			}
+		});
+	}
 	if (gameArea.key && gameArea.key == 38 && playerpos != 0 && onepress == 0) {playerpos -= 1; onepress = 1;}
 	if (gameArea.key && gameArea.key == 40 && playerpos != 2 && onepress == 0) {playerpos += 1; onepress = 1;}
-	}
 	player.newPos();
 	player.update();
 }
@@ -217,6 +252,6 @@ function getCookie(cname) {
     return "";
 }
 function setMode(setting) {
-	document.cookie = "mode=" + setting + ";";
+	location.hash = setting;
 	location.reload();
 }

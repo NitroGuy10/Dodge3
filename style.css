@@ -54,3 +54,6 @@ button {
 .list:hover .listoptions {
     display: block;
 }
+.null {
+	display: none;
+}
