@@ -105,11 +105,11 @@ var gameArea = {
 		gameArea.key = false;
 		if (mobile == true) {
 		document.getElementById("mode").className = "list";
-		}
 		$("html, body").css({
 			overflow: "auto",
 			height: "auto"
 		});
+		}
 		setInterval(function(){ 
 			window.addEventListener("keydown", function (e) {
 			gameArea.key = e.keyCode;
